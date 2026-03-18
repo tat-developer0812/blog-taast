@@ -1,0 +1,24 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/sync-competitions",
+      "schedule": "0 0 * * 1"
+    },
+    {
+      "path": "/api/cron/sync-teams?players=false",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/sync-matches",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/sync-matches?mode=live",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/generate-articles?scope=all",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

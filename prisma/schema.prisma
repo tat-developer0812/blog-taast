@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Competition {
+  id          Int      @id @default(autoincrement())
+  externalId  Int      @unique @map("external_id")
+  name        String
+  code        String?
+  type        String?
+  emblem      String?
+  area        String?
+  season      String?
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  matches Match[]
+
+  @@map("competitions")
+}
+
+model Team {
+  id          Int      @id @default(autoincrement())
+  externalId  Int      @unique @map("external_id")
+  name        String
+  shortName   String?  @map("short_name")
+  tla         String?
+  crest       String?
+  area        String?
+  slug        String   @unique
+  founded     Int?
+  venue       String?
+  coach       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  homeMatches Match[] @relation("HomeTeam")
+  awayMatches Match[] @relation("AwayTeam")
+  players     Player[]
+  articles    Article[]
+
+  @@map("teams")
+}
+
+model Player {
+  id          Int      @id @default(autoincrement())
+  externalId  Int      @unique @map("external_id")
+  name        String
+  position    String?
+  dateOfBirth DateTime? @map("date_of_birth")
+  nationality String?
+  shirtNumber Int?     @map("shirt_number")
+  teamId      Int      @map("team_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@map("players")
+}
+
+model Match {
+  id             Int      @id @default(autoincrement())
+  externalId     Int      @unique @map("external_id")
+  competitionId  Int      @map("competition_id")
+  homeTeamId     Int      @map("home_team_id")
+  awayTeamId     Int      @map("away_team_id")
+  status         String
+  matchday       Int?
+  stage          String?
+  group          String?
+  utcDate        DateTime @map("utc_date")
+  homeScore      Int?     @map("home_score")
+  awayScore      Int?     @map("away_score")
+  winner         String?
+  slug           String   @unique
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  competition Competition @relation(fields: [competitionId], references: [id])
+  homeTeam    Team        @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam    Team        @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  articles    Article[]
+
+  @@map("matches")
+}
+
+model HeadToHead {
+  id              Int    @id @default(autoincrement())
+  team1Id         Int    @map("team1_id")
+  team2Id         Int    @map("team2_id")
+  totalMatches    Int    @default(0) @map("total_matches")
+  team1Wins       Int    @default(0) @map("team1_wins")
+  team2Wins       Int    @default(0) @map("team2_wins")
+  draws           Int    @default(0)
+  team1Goals      Int    @default(0) @map("team1_goals")
+  team2Goals      Int    @default(0) @map("team2_goals")
+  lastUpdated     DateTime @default(now()) @map("last_updated")
+
+  @@unique([team1Id, team2Id])
+  @@map("head_to_head")
+}
+
+model Article {
+  id             Int      @id @default(autoincrement())
+  title          String
+  slug           String   @unique
+  content        String
+  excerpt        String?
+  type           String
+  status         String   @default("draft")
+  seoTitle       String?  @map("seo_title")
+  seoDescription String?  @map("seo_description")
+  featuredImage  String?  @map("featured_image")
+  teamId         Int?     @map("team_id")
+  matchId        Int?     @map("match_id")
+  publishedAt    DateTime? @map("published_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  team  Team?  @relation(fields: [teamId], references: [id])
+  match Match? @relation(fields: [matchId], references: [id])
+
+  @@index([type])
+  @@index([status])
+  @@index([slug])
+  @@map("articles")
+}
+
+model SyncLog {
+  id        Int      @id @default(autoincrement())
+  type      String   // competitions, teams, players, matches
+  status    String   // success, error
+  result    String?  // JSON summary
+  error     String?
+  duration  Int?     // milliseconds
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([type])
+  @@index([createdAt])
+  @@map("sync_logs")
+}

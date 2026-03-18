@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #111827;
+  --primary: #1d4ed8;
+  --primary-dark: #1e40af;
+  --accent: #059669;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --card: #f9fafb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --accent: #10b981;
+    --muted: #94a3b8;
+    --border: #1e293b;
+    --card: #1e293b;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.prose h1, .prose h2, .prose h3 {
+  color: var(--foreground);
+}
+
+.prose a {
+  color: var(--primary);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.prose th, .prose td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.prose th {
+  background: var(--card);
+  font-weight: 600;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--primary);
+  padding: 0.75rem 1rem;
+  background: var(--card);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
