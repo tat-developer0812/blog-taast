@@ -7,6 +7,7 @@ import { sportsEventJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
 import { RelatedArticles } from "@/components/related-articles";
+import { TeamCrest } from "@/components/team-crest";
 
 interface Props {
   params: { slug: string };
@@ -118,13 +119,7 @@ export default async function MatchDetailPage({ params }: Props) {
 
         <div className="flex items-center justify-center gap-6 sm:gap-10">
           <div className="flex-1 text-center">
-            {match.homeTeam.crest && (
-              <img
-                src={match.homeTeam.crest}
-                alt={match.homeTeam.name}
-                className="mx-auto mb-2 h-16 w-16 object-contain sm:h-20 sm:w-20"
-              />
-            )}
+            <TeamCrest src={match.homeTeam.crest} alt={match.homeTeam.name} size="lg" priority />
             <p className="text-lg font-bold">{match.homeTeam.name}</p>
           </div>
 
@@ -148,13 +143,7 @@ export default async function MatchDetailPage({ params }: Props) {
           </div>
 
           <div className="flex-1 text-center">
-            {match.awayTeam.crest && (
-              <img
-                src={match.awayTeam.crest}
-                alt={match.awayTeam.name}
-                className="mx-auto mb-2 h-16 w-16 object-contain sm:h-20 sm:w-20"
-              />
-            )}
+            <TeamCrest src={match.awayTeam.crest} alt={match.awayTeam.name} size="lg" priority />
             <p className="text-lg font-bold">{match.awayTeam.name}</p>
           </div>
         </div>

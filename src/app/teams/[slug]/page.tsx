@@ -8,6 +8,7 @@ import { teamJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
 import { RelatedArticles } from "@/components/related-articles";
+import { TeamCrest } from "@/components/team-crest";
 
 interface Props {
   params: { slug: string };
@@ -82,13 +83,7 @@ export default async function TeamPage({ params }: Props) {
       />
       {/* Team header */}
       <div className="mb-8 flex items-center gap-4">
-        {team.crest && (
-          <img
-            src={team.crest}
-            alt={team.name}
-            className="h-20 w-20 object-contain"
-          />
-        )}
+        <TeamCrest src={team.crest} alt={team.name} size="xl" priority />
         <div>
           <h1 className="text-3xl font-bold">{team.name}</h1>
           <p className="text-[var(--muted)]">
