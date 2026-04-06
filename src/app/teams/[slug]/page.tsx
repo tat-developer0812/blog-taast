@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
 import { RelatedArticles } from "@/components/related-articles";
 import { TeamCrest } from "@/components/team-crest";
+import { ArticleReadTracker } from "@/components/article-read-tracker";
 
 interface Props {
   params: { slug: string };
@@ -150,6 +151,8 @@ export default async function TeamPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      <ArticleReadTracker slug={team.slug} />
 
       {/* Related articles */}
       <RelatedArticles

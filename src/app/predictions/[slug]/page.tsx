@@ -7,6 +7,7 @@ import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
 import { RelatedArticles } from "@/components/related-articles";
+import { ArticleReadTracker } from "@/components/article-read-tracker";
 
 interface Props {
   params: { slug: string };
@@ -127,6 +128,8 @@ export default async function PredictionPage({ params }: Props) {
           }).format(article.publishedAt)}
         </p>
       )}
+
+      <ArticleReadTracker slug={article.slug} />
 
       <RelatedArticles
         currentId={article.id}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { usePlausible } from "@/hooks/usePlausible";
 
 interface ShareButtonsProps {
   /** Relative path, e.g. "/teams/brazil" — will be prefixed with NEXT_PUBLIC_BASE_URL */
@@ -15,6 +16,7 @@ export function ShareButtons({ url, title, className }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { trackEvent } = usePlausible();
 
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") ?? "";
@@ -27,6 +29,7 @@ export function ShareButtons({ url, title, className }: ShareButtonsProps) {
 
   // Fix 1: null out opener to prevent reverse tabnapping
   const handleNativeShare = async () => {
+    trackEvent("Share", { method: "facebook" });
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share({ title, url: fullUrl });
@@ -44,6 +47,7 @@ export function ShareButtons({ url, title, className }: ShareButtonsProps) {
   };
 
   const handleZalo = () => {
+    trackEvent("Share", { method: "zalo" });
     const popup = window.open(
       `https://zalo.me/share?url=${encodeURIComponent(fullUrl)}&title=${encodeURIComponent(title)}`,
       "_blank",
@@ -55,6 +59,7 @@ export function ShareButtons({ url, title, className }: ShareButtonsProps) {
   // Fix 2: Remove execCommand fallback, show error state instead
   // Fix 4: Clean up setTimeout with useRef
   const handleCopy = async () => {
+    trackEvent("Share", { method: "copy" });
     try {
       await navigator.clipboard.writeText(fullUrl);
       setCopied(true);
