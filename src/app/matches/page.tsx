@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
-import { MatchCard } from "@/components/match-card";
+import { MatchesClientGrid } from "./matches-client-grid";
 
 export const metadata: Metadata = {
   title: "Lịch thi đấu World Cup 2026",
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Lịch thi đấu đầy đủ World Cup 2026. Xem tất cả trận đấu, tỷ số và kết quả.",
 };
 
-export const revalidate = 1800; // 30 minutes
+export const revalidate = 1800;
 
 const STAGE_ORDER = [
   "GROUP_STAGE",
@@ -19,7 +19,7 @@ const STAGE_ORDER = [
   "FINAL",
 ];
 
-const STAGE_LABELS: Record<string, string> = {
+export const STAGE_LABELS: Record<string, string> = {
   GROUP_STAGE: "Vòng bảng",
   ROUND_OF_16: "Vòng 1/16",
   QUARTER_FINALS: "Tứ kết",
@@ -34,7 +34,6 @@ export default async function MatchesPage() {
     orderBy: { utcDate: "asc" },
   });
 
-  // Group by stage
   const grouped: Record<string, typeof matches> = {};
   for (const match of matches) {
     const stage = match.stage || "OTHER";
@@ -45,6 +44,14 @@ export default async function MatchesPage() {
   const orderedStages = STAGE_ORDER.filter((s) => grouped[s]);
   if (grouped["OTHER"]) orderedStages.push("OTHER");
 
+  // Serialize for client component (Date → string)
+  const serializedGrouped = Object.fromEntries(
+    Object.entries(grouped).map(([stage, stageMatches]) => [
+      stage,
+      stageMatches.map((m) => ({ ...m, utcDate: m.utcDate.toISOString() })),
+    ])
+  );
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
       <h1 className="mb-2 text-3xl font-bold">Lịch thi đấu World Cup 2026</h1>
@@ -52,31 +59,11 @@ export default async function MatchesPage() {
         {matches.length} trận đấu | Giờ Việt Nam (UTC+7)
       </p>
 
-      {orderedStages.map((stage) => (
-        <section key={stage} className="mb-10">
-          <h2 className="mb-4 text-xl font-semibold">
-            {STAGE_LABELS[stage] || stage}
-          </h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {grouped[stage].map((match) => (
-              <MatchCard
-                key={match.id}
-                slug={match.slug}
-                homeTeam={match.homeTeam.name}
-                awayTeam={match.awayTeam.name}
-                homeTla={match.homeTeam.tla}
-                awayTla={match.awayTeam.tla}
-                homeScore={match.homeScore}
-                awayScore={match.awayScore}
-                status={match.status}
-                utcDate={match.utcDate}
-                stage={match.stage}
-                group={match.group}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
+      <MatchesClientGrid
+        grouped={serializedGrouped}
+        orderedStages={orderedStages}
+        stageLabelMap={STAGE_LABELS}
+      />
 
       {matches.length === 0 && (
         <div className="rounded-xl border border-[var(--border)] p-8 text-center">

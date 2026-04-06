@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-import { MatchCard } from "@/components/match-card";
+import { HomeLiveMatches } from "./home-live-matches";
 import { ArticleCard } from "@/components/article-card";
 
 export const revalidate = 3600; // ISR: revalidate every hour
@@ -32,6 +32,8 @@ export default async function HomePage() {
     getLatestArticles(),
     getTeamCount(),
   ]);
+
+  const serializedMatches = matches.map((m) => ({ ...m, utcDate: m.utcDate.toISOString() }));
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -93,24 +95,7 @@ export default async function HomePage() {
               Xem tất cả
             </Link>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {matches.map((match) => (
-              <MatchCard
-                key={match.id}
-                slug={match.slug}
-                homeTeam={match.homeTeam.name}
-                awayTeam={match.awayTeam.name}
-                homeTla={match.homeTeam.tla}
-                awayTla={match.awayTeam.tla}
-                homeScore={match.homeScore}
-                awayScore={match.awayScore}
-                status={match.status}
-                utcDate={match.utcDate}
-                stage={match.stage}
-                group={match.group}
-              />
-            ))}
-          </div>
+          <HomeLiveMatches matches={serializedMatches} />
         </section>
       )}
 

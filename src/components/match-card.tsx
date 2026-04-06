@@ -12,6 +12,11 @@ interface MatchCardProps {
   utcDate: Date;
   stage: string | null;
   group: string | null;
+  // Live overlay props — provided by useLiveScores hook
+  isLive?: boolean;
+  liveHomeScore?: number | null;
+  liveAwayScore?: number | null;
+  liveStatus?: string;
 }
 
 const STAGE_LABELS: Record<string, string> = {
@@ -46,11 +51,24 @@ export function MatchCard({
   utcDate,
   stage,
   group,
+  isLive = false,
+  liveHomeScore,
+  liveAwayScore,
+  liveStatus,
 }: MatchCardProps) {
-  const isLive = status === "LIVE" || status === "IN_PLAY";
-  const isFinished = status === "FINISHED";
+  const effectiveStatus = liveStatus ?? status;
+  const effectiveHomeScore = liveHomeScore !== undefined ? liveHomeScore : homeScore;
+  const effectiveAwayScore = liveAwayScore !== undefined ? liveAwayScore : awayScore;
+
+  const displayLive =
+    isLive ||
+    effectiveStatus === "LIVE" ||
+    effectiveStatus === "IN_PLAY";
+  const isFinished = effectiveStatus === "FINISHED";
+  const isPaused = effectiveStatus === "PAUSED";
+
   const stageLabel = stage ? STAGE_LABELS[stage] || stage : "";
-  const statusLabel = STATUS_LABELS[status] || status;
+  const statusLabel = STATUS_LABELS[effectiveStatus] || effectiveStatus;
 
   const dateStr = new Intl.DateTimeFormat("vi-VN", {
     day: "numeric",
@@ -63,8 +81,18 @@ export function MatchCard({
   return (
     <Link
       href={`/matches/${slug}`}
-      className="group block rounded-xl border border-[var(--border)] bg-[var(--background)] p-4 transition-shadow hover:shadow-lg"
+      className="group relative block rounded-xl border border-[var(--border)] bg-[var(--background)] p-4 transition-shadow hover:shadow-lg"
     >
+      {/* Live badge */}
+      {(displayLive || isPaused) && (
+        <span className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+          {displayLive && (
+            <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+          )}
+          {isPaused ? "GIẢI LAO" : "TRỰC TIẾP"}
+        </span>
+      )}
+
       <div className="mb-2 flex items-center justify-between text-xs text-[var(--muted)]">
         <span>
           {stageLabel}
@@ -72,14 +100,14 @@ export function MatchCard({
         </span>
         <span
           className={
-            isLive
+            displayLive
               ? "font-semibold text-red-500"
               : isFinished
                 ? "text-[var(--accent)]"
                 : ""
           }
         >
-          {isLive ? `${statusLabel}` : statusLabel}
+          {statusLabel}
         </span>
       </div>
 
@@ -90,9 +118,13 @@ export function MatchCard({
         </div>
 
         <div className="flex min-w-[80px] items-center justify-center gap-2 text-center">
-          {isFinished || isLive ? (
-            <span className="text-2xl font-bold tabular-nums">
-              {homeScore} - {awayScore}
+          {isFinished || displayLive || isPaused ? (
+            <span
+              className={`text-2xl font-bold tabular-nums ${
+                displayLive ? "text-red-600" : ""
+              }`}
+            >
+              {effectiveHomeScore} - {effectiveAwayScore}
             </span>
           ) : (
             <span className="text-sm text-[var(--muted)]">{dateStr}</span>
