@@ -20,7 +20,8 @@ model Competition {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  matches Match[]
+  matches   Match[]
+  standings Standing[]
 
   @@map("competitions")
 }
@@ -44,6 +45,7 @@ model Team {
   awayMatches Match[] @relation("AwayTeam")
   players     Player[]
   articles    Article[]
+  standings   Standing[]
 
   @@index([name], map: "teams_fts_idx")
   @@map("teams")
@@ -159,4 +161,29 @@ model Subscriber {
   createdAt        DateTime  @default(now()) @map("created_at")
 
   @@map("subscribers")
+}
+
+model Standing {
+  id             Int         @id @default(autoincrement())
+  competitionId  Int         @map("competition_id")
+  groupName      String      @map("group_name")
+  position       Int
+  playedGames    Int         @map("played_games")
+  won            Int
+  draw           Int
+  lost           Int
+  goalsFor       Int         @map("goals_for")
+  goalsAgainst   Int         @map("goals_against")
+  goalDifference Int         @map("goal_difference")
+  points         Int
+  teamId         Int         @map("team_id")
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+
+  competition Competition @relation(fields: [competitionId], references: [id])
+  team        Team        @relation(fields: [teamId], references: [id])
+
+  @@unique([competitionId, groupName, teamId])
+  @@index([competitionId])
+  @@map("standings")
 }

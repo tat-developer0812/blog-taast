@@ -48,10 +48,25 @@ export interface UnifiedCompetition {
   endDate: string | null;
 }
 
+export interface UnifiedStanding {
+  groupName: string;
+  position: number;
+  teamExternalId: number;
+  playedGames: number;
+  won: number;
+  draw: number;
+  lost: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDifference: number;
+  points: number;
+}
+
 export interface FootballApiClient {
   name: string;
   getCompetition(id: number): Promise<UnifiedCompetition>;
   getTeams(competitionId: number): Promise<UnifiedTeam[]>;
   getMatches(competitionId: number): Promise<UnifiedMatch[]>;
   getTeamPlayers(teamId: number): Promise<UnifiedPlayer[]>;
+  getStandings(competitionId: number): Promise<UnifiedStanding[]>;
 }

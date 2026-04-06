@@ -4,6 +4,7 @@ import type {
   UnifiedTeam,
   UnifiedMatch,
   UnifiedPlayer,
+  UnifiedStanding,
 } from "./types";
 
 const BASE_URL = "https://www.thesportsdb.com/api/v1/json";
@@ -149,5 +150,10 @@ export const theSportsDbClient: FootballApiClient = {
       nationality: p.strNationality,
       shirtNumber: p.strNumber ? parseInt(p.strNumber) : null,
     }));
+  },
+
+  async getStandings(_competitionId: number): Promise<UnifiedStanding[]> {
+    // TheSportsDB free tier does not support standings
+    return [];
   },
 };

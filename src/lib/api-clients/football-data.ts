@@ -4,6 +4,7 @@ import type {
   UnifiedTeam,
   UnifiedMatch,
   UnifiedPlayer,
+  UnifiedStanding,
 } from "./types";
 import { cached } from "@/lib/cache";
 
@@ -74,6 +75,30 @@ interface FdMatch {
     fullTime: { home: number | null; away: number | null };
     winner: string | null;
   };
+}
+
+interface FdTableEntry {
+  position: number;
+  team: { id: number };
+  playedGames: number;
+  won: number;
+  draw: number;
+  lost: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDifference: number;
+  points: number;
+}
+
+interface FdStandingsTable {
+  stage: string;
+  type: string;
+  group: string | null;
+  table: FdTableEntry[];
+}
+
+interface FdStandingsResponse {
+  standings: FdStandingsTable[];
 }
 
 export const footballDataClient: FootballApiClient = {
@@ -148,6 +173,38 @@ export const footballDataClient: FootballApiClient = {
         nationality: p.nationality,
         shirtNumber: p.shirtNumber,
       }));
+    });
+  },
+
+  async getStandings(competitionId: number): Promise<UnifiedStanding[]> {
+    return cached(`fd:standings:${competitionId}`, 3600_000, async () => {
+      const data = await fetchApi<FdStandingsResponse>(
+        `/competitions/${competitionId}/standings`
+      );
+
+      const results: UnifiedStanding[] = [];
+
+      for (const table of data.standings) {
+        if (table.type !== "TOTAL") continue;
+        const groupName = table.group ?? table.stage;
+        for (const entry of table.table) {
+          results.push({
+            groupName,
+            position: entry.position,
+            teamExternalId: entry.team.id,
+            playedGames: entry.playedGames,
+            won: entry.won,
+            draw: entry.draw,
+            lost: entry.lost,
+            goalsFor: entry.goalsFor,
+            goalsAgainst: entry.goalsAgainst,
+            goalDifference: entry.goalDifference,
+            points: entry.points,
+          });
+        }
+      }
+
+      return results;
     });
   },
 };

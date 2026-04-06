@@ -8,6 +8,7 @@ export type {
   UnifiedMatch,
   UnifiedPlayer,
   UnifiedCompetition,
+  UnifiedStanding,
 } from "./types";
 
 // Registry of all available API clients

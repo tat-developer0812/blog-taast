@@ -64,7 +64,7 @@ export default async function WorldCupPage() {
       </section>
 
       {/* Quick links */}
-      <section className="mb-10 grid gap-4 sm:grid-cols-3">
+      <section className="mb-10 grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <Link
           href="/teams"
           className="rounded-xl border border-[var(--border)] p-6 transition-shadow hover:shadow-lg"
@@ -100,6 +100,22 @@ export default async function WorldCupPage() {
           <p className="text-sm text-[var(--muted)]">
             Nhận định và phân tích
           </p>
+        </Link>
+        <Link
+          href="/world-cup/standings"
+          className="rounded-xl border border-[var(--border)] p-6 transition-shadow hover:shadow-lg"
+        >
+          <p className="text-3xl font-bold text-[var(--primary)]">12</p>
+          <p className="text-lg font-semibold">Bảng xếp hạng</p>
+          <p className="text-sm text-[var(--muted)]">Thứ hạng & điểm số 12 bảng đấu</p>
+        </Link>
+        <Link
+          href="/world-cup/bracket"
+          className="rounded-xl border border-[var(--border)] p-6 transition-shadow hover:shadow-lg"
+        >
+          <p className="text-3xl font-bold text-[var(--primary)]">32</p>
+          <p className="text-lg font-semibold">Nhánh đấu loại trực tiếp</p>
+          <p className="text-sm text-[var(--muted)]">Từ vòng 1/32 đến chung kết</p>
         </Link>
       </section>
 
