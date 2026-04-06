@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { HomeLiveMatches } from "./home-live-matches";
 import { ArticleCard } from "@/components/article-card";
+import { NewsletterForm } from "@/components/newsletter-form";
 
 export const revalidate = 3600; // ISR: revalidate every hour
 
@@ -125,6 +126,11 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Newsletter */}
+      <section className="mb-12">
+        <NewsletterForm />
+      </section>
     </div>
   );
 }

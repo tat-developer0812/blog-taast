@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NewsletterForm } from "@/components/newsletter-form";
 
 export function Footer() {
   return (
@@ -48,14 +49,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-3 font-semibold">Thông tin</h4>
-            <ul className="space-y-2 text-sm text-[var(--muted)]">
-              <li>
-                <Link href="/blog" className="hover:text-[var(--primary)]">
-                  Tin tức mới nhất
-                </Link>
-              </li>
-            </ul>
+            <NewsletterForm compact />
           </div>
         </div>
 
