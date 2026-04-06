@@ -6,6 +6,7 @@ import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { sportsEventJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
+import { RelatedArticles } from "@/components/related-articles";
 
 interface Props {
   params: { slug: string };
@@ -193,6 +194,13 @@ export default async function MatchDetailPage({ params }: Props) {
           </p>
         </div>
       )}
+
+      <RelatedArticles
+        currentId={article?.id ?? 0}
+        matchId={match.id}
+        teamId={match.homeTeamId}
+        type="match_preview"
+      />
 
       {/* Share */}
       <div className="mt-10">

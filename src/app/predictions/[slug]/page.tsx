@@ -6,6 +6,7 @@ import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
+import { RelatedArticles } from "@/components/related-articles";
 
 interface Props {
   params: { slug: string };
@@ -115,14 +116,6 @@ export default async function PredictionPage({ params }: Props) {
 
       <MarkdownRenderer content={article.content} />
 
-      {/* Share */}
-      <div className="mt-10">
-        <ShareButtons
-          url={`/predictions/${article.slug}`}
-          title={article.seoTitle ?? article.title}
-        />
-      </div>
-
       {/* Published date */}
       {article.publishedAt && (
         <p className="mt-8 text-sm text-[var(--muted)]">
@@ -134,6 +127,21 @@ export default async function PredictionPage({ params }: Props) {
           }).format(article.publishedAt)}
         </p>
       )}
+
+      <RelatedArticles
+        currentId={article.id}
+        matchId={article.matchId}
+        teamId={article.match?.homeTeam?.id ?? null}
+        type="prediction"
+      />
+
+      {/* Share */}
+      <div className="mt-10">
+        <ShareButtons
+          url={`/predictions/${article.slug}`}
+          title={article.seoTitle ?? article.title}
+        />
+      </div>
     </div>
   );
 }

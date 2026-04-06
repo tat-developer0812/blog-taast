@@ -7,6 +7,7 @@ import { MatchCard } from "@/components/match-card";
 import { teamJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
+import { RelatedArticles } from "@/components/related-articles";
 
 interface Props {
   params: { slug: string };
@@ -156,23 +157,11 @@ export default async function TeamPage({ params }: Props) {
       )}
 
       {/* Related articles */}
-      <section>
-        <h2 className="mb-4 text-2xl font-bold">Bài viết liên quan</h2>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/predictions"
-            className="rounded-lg bg-[var(--card)] px-4 py-2 text-sm hover:bg-[var(--border)]"
-          >
-            Dự đoán kết quả
-          </Link>
-          <Link
-            href="/teams"
-            className="rounded-lg bg-[var(--card)] px-4 py-2 text-sm hover:bg-[var(--border)]"
-          >
-            Tất cả đội tuyển
-          </Link>
-        </div>
-      </section>
+      <RelatedArticles
+        currentId={article?.id ?? 0}
+        teamId={team.id}
+        type="team_history"
+      />
 
       {/* Share */}
       <div className="mt-10">
