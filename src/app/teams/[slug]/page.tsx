@@ -6,6 +6,7 @@ import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { MatchCard } from "@/components/match-card";
 import { teamJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
+import { ShareButtons } from "@/components/share-buttons";
 
 interface Props {
   params: { slug: string };
@@ -172,6 +173,11 @@ export default async function TeamPage({ params }: Props) {
           </Link>
         </div>
       </section>
+
+      {/* Share */}
+      <div className="mt-10">
+        <ShareButtons url={`/teams/${team.slug}`} title={`${team.name} - World Cup 2026`} />
+      </div>
     </div>
   );
 }

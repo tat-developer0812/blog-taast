@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { sportsEventJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
+import { ShareButtons } from "@/components/share-buttons";
 
 interface Props {
   params: { slug: string };
@@ -192,6 +193,14 @@ export default async function MatchDetailPage({ params }: Props) {
           </p>
         </div>
       )}
+
+      {/* Share */}
+      <div className="mt-10">
+        <ShareButtons
+          url={`/matches/${match.slug}`}
+          title={`${match.homeTeam.name} vs ${match.awayTeam.name} - World Cup 2026`}
+        />
+      </div>
     </div>
   );
 }

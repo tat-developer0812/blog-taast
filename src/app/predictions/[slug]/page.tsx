@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/json-ld";
 import { JsonLd } from "@/components/json-ld";
+import { ShareButtons } from "@/components/share-buttons";
 
 interface Props {
   params: { slug: string };
@@ -113,6 +114,14 @@ export default async function PredictionPage({ params }: Props) {
       )}
 
       <MarkdownRenderer content={article.content} />
+
+      {/* Share */}
+      <div className="mt-10">
+        <ShareButtons
+          url={`/predictions/${article.slug}`}
+          title={article.seoTitle ?? article.title}
+        />
+      </div>
 
       {/* Published date */}
       {article.publishedAt && (
