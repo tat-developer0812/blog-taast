@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Analytics } from "@/components/analytics";
+import { ErrorBoundary } from "@/components/error-boundary";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -50,7 +51,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased font-[family-name:var(--font-geist-sans)]`}
       >
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1"><ErrorBoundary>{children}</ErrorBoundary></main>
         <Footer />
         <Analytics />
       </body>
