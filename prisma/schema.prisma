@@ -45,6 +45,7 @@ model Team {
   players     Player[]
   articles    Article[]
 
+  @@index([name], map: "teams_fts_idx")
   @@map("teams")
 }
 
@@ -88,6 +89,7 @@ model Match {
   awayTeam    Team        @relation("AwayTeam", fields: [awayTeamId], references: [id])
   articles    Article[]
 
+  @@index([slug], map: "matches_fts_idx")
   @@map("matches")
 }
 
@@ -130,6 +132,7 @@ model Article {
   @@index([type])
   @@index([status])
   @@index([slug])
+  @@index([title, excerpt], map: "articles_fts_idx")
   @@map("articles")
 }
 
