@@ -152,6 +152,7 @@ export const theSportsDbClient: FootballApiClient = {
     }));
   },
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getStandings(_competitionId: number): Promise<UnifiedStanding[]> {
     // TheSportsDB free tier does not support standings
     return [];

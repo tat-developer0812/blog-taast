@@ -8,19 +8,7 @@ function formatDate(date: Date): string {
   }).format(date);
 }
 
-function formatStage(stage: string | null): string {
-  const map: Record<string, string> = {
-    GROUP_STAGE: "Vòng bảng",
-    ROUND_OF_16: "Vòng 1/16",
-    QUARTER_FINALS: "Tứ kết",
-    SEMI_FINALS: "Bán kết",
-    THIRD_PLACE: "Tranh hạng 3",
-    FINAL: "Chung kết",
-  };
-  return stage ? map[stage] || stage : "";
-}
-
-function renderRecentMatches(matches: MatchData[], team1Name: string, team2Name: string): string {
+function renderRecentMatches(matches: MatchData[]): string {
   if (matches.length === 0) return "";
 
   let md = `## Các trận đấu gần đây\n\n`;
@@ -102,7 +90,7 @@ export function generateHeadToHead(data: H2HData): string {
   }
 
   // Recent matches
-  md += renderRecentMatches(data.recentMatches, team1.name, team2.name);
+  md += renderRecentMatches(data.recentMatches);
 
   // World Cup 2026 context
   md += `## Đối đầu tại World Cup 2026\n\n`;

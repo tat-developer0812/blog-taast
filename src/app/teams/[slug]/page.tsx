@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { MatchCard } from "@/components/match-card";

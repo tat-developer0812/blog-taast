@@ -19,7 +19,7 @@ const STAGE_ORDER = [
   "FINAL",
 ];
 
-export const STAGE_LABELS: Record<string, string> = {
+const STAGE_LABELS: Record<string, string> = {
   GROUP_STAGE: "Vòng bảng",
   ROUND_OF_16: "Vòng 1/16",
   QUARTER_FINALS: "Tứ kết",
